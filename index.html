@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đề thi thử TN THPT 2026 – Tiếng Anh – Đề 01</title>
+<style>
+:root{
+  --bg:#f6f4ef; --paper:#ffffff; --ink:#1d2433; --muted:#667085; --line:#e4e1d9;
+  --accent:#1f4e78; --accent-soft:#e8eef5; --ok:#1e7a46; --ok-soft:#e5f4ea; --bad:#b42318; --bad-soft:#fdecea;
+  --warn:#b54708;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.55}
+button{font:inherit;cursor:pointer}
+.hidden{display:none!important}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:20;background:var(--accent);color:#fff;display:flex;align-items:center;gap:16px;padding:10px 20px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.topbar .title{font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.timer{font-variant-numeric:tabular-nums;font-size:22px;font-weight:700;background:rgba(255,255,255,.14);padding:4px 14px;border-radius:8px;letter-spacing:.5px}
+.timer.warn{background:#fff3e0;color:var(--warn)}
+.timer.crit{background:#fff;color:var(--bad);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.55}}
+.btn{border:0;border-radius:8px;padding:9px 18px;font-weight:600}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-light{background:#fff;color:var(--accent)}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ---------- start screen ---------- */
+.center-card{max-width:620px;margin:48px auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:32px 36px;box-shadow:0 4px 18px rgba(0,0,0,.05)}
+.center-card h1{font-size:24px;margin:0 0 4px}
+.center-card .sub{color:var(--muted);margin:0 0 22px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-weight:600;font-size:14px}
+.field input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px}
+.field input:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+.rules{background:var(--accent-soft);border-radius:10px;padding:12px 16px;margin:18px 0;font-size:14.5px}
+.rules ul{margin:6px 0 0;padding-left:20px}
+
+/* ---------- exam layout ---------- */
+.nav{display:flex;gap:6px;flex-wrap:wrap;padding:10px 20px;background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:54px;z-index:15}
+.nav button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 14px;font-size:14px}
+.nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.nav button .cnt{font-size:12px;opacity:.75;margin-left:4px}
+.wrap{max-width:1360px;margin:0 auto;padding:18px 20px 120px}
+.sec-head{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:12px 16px;margin-bottom:14px;font-style:italic;font-weight:600}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.passage{position:sticky;top:112px;max-height:calc(100vh - 130px);overflow:auto;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:20px 24px;font-family:Georgia,"Times New Roman",serif;font-size:16.5px;line-height:1.7}
+.passage p{margin:0 0 12px;text-align:justify}
+.passage .ptitle{text-align:center;font-weight:700;font-size:17.5px}
+.passage .src{text-align:right;font-style:italic;color:var(--muted);font-size:14px}
+.passage ul{margin:0 0 12px;padding-left:22px}
+.passage u{text-decoration-thickness:2px}
+.passage .pnum{display:inline-block;min-width:26px;color:var(--muted);font-family:Arial,sans-serif;font-size:12px}
+.qcol{display:flex;flex-direction:column;gap:12px}
+.q{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 18px;scroll-margin-top:120px}
+.q .stem{margin-bottom:8px}
+.q .stem b.qn{color:var(--accent)}
+.q .items{margin:6px 0 10px;padding-left:6px;font-size:15.5px}
+.q .items div{margin:3px 0}
+.q .quote{font-style:italic;font-weight:600;border-left:3px solid var(--line);padding-left:10px;margin:6px 0 10px}
+.opts{display:grid;gap:6px}
+.opts.short{grid-template-columns:repeat(4,minmax(0,1fr))}
+.opts.mid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:#fff;text-align:left;font-size:15px;line-height:1.45;transition:background .12s,border-color .12s}
+.opt:hover{border-color:#b7c4d4;background:#fafbfd}
+.opt .L{font-weight:700;color:var(--accent);flex:0 0 auto}
+.opt.sel{background:var(--accent-soft);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.locked .opt{cursor:default}
+.qflag{font-size:13px;font-weight:600;margin-left:6px}
+.qflag.ok{color:var(--ok)} .qflag.no{color:var(--bad)}
+.secfoot{display:flex;justify-content:space-between;margin-top:18px}
+
+/* ---------- palette ---------- */
+.palette{position:fixed;right:16px;bottom:16px;z-index:25;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.12);padding:10px 12px;width:268px}
+.palette .ph{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;font-weight:600;margin-bottom:6px}
+.palette .grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+.palette .grid button{border:1px solid var(--line);background:#fff;border-radius:6px;font-size:12px;padding:4px 0}
+.palette .grid button.done{background:var(--accent);color:#fff;border-color:var(--accent)}
+.palette .grid button.r{background:var(--ok);color:#fff;border-color:var(--ok)}
+.palette .grid button.w{background:var(--bad);color:#fff;border-color:var(--bad)}
+.palette.min .grid,.palette.min .pf{display:none}
+.palette .pf{margin-top:8px}
+.palette .pf .btn{width:100%}
+.toggle{background:none;border:0;color:var(--muted);font-size:12px}
+
+/* ---------- result ---------- */
+.result{max-width:820px;margin:28px auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 30px}
+.score{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.score .big{font-size:56px;font-weight:800;color:var(--accent);line-height:1}
+.score .big small{font-size:22px;color:var(--muted);font-weight:600}
+table.bd{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px}
+table.bd th,table.bd td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left}
+table.bd td.n{text-align:right;font-variant-numeric:tabular-nums}
+.status{border-radius:10px;padding:12px 16px;margin:14px 0;font-size:15px}
+.status.ok{background:var(--ok-soft);color:var(--ok)}
+.status.info{background:var(--accent-soft);color:var(--accent)}
+.status.err{background:var(--bad-soft);color:var(--bad)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;z-index:50}
+.modal .box{background:#fff;border-radius:14px;padding:24px 26px;max-width:440px;width:92%}
+.modal h3{margin:0 0 8px}
+.modal .actions{justify-content:flex-end;margin-top:18px}
+
+@media (max-width:900px){
+  .split{grid-template-columns:1fr}
+  .passage{position:relative;top:0;max-height:46vh}
+  .opts.short{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .opts.mid{grid-template-columns:1fr}
+  .palette{width:auto;left:12px;right:12px}
+  .palette .grid{grid-template-columns:repeat(10,1fr)}
+  .topbar .title{font-size:14px}
+}
+@media print{.topbar,.nav,.palette{display:none}}
+</style>
+</head>
+<body>
+
+<script>
+const CONFIG = {
+  EXAM_TITLE: "Đề thi thử TN THPT 2026 – Tiếng Anh – Đề 01",
+  DURATION_MIN: 50,
+  // Google Form nhận kết quả (form "Đề thi thử": Họ và tên + Câu 1–40, trả lời ngắn)
+  FORM_VIEW_URL: "https://forms.gle/xw5khqLPJ9c3FiW79",
+  FORM_ACTION: "https://docs.google.com/forms/d/e/1FAIpQLSezeQdD-U-oTu8MfumbTPvr6AqfyaYk9w38ft-3XCbkK_hazA/formResponse",
+  ENTRY_NAME: "entry.209300642",   // ô "Họ và tên" – gửi dạng "Họ tên - Lớp"
+  ENTRY_Q: ["entry.1247597933", "entry.1324691269", "entry.124271035", "entry.1773706965", "entry.1928037014", "entry.1427405863", "entry.1918550436", "entry.235443814", "entry.1012329291", "entry.1185085448", "entry.370541844", "entry.2000053702", "entry.1197217950", "entry.1678811071", "entry.1342311318", "entry.2006927983", "entry.669590597", "entry.66348705", "entry.2089919067", "entry.903470100", "entry.81344373", "entry.791562209", "entry.1990718933", "entry.630630337", "entry.48384114", "entry.1765323809", "entry.1825086115", "entry.1534696621", "entry.1992269101", "entry.2040978464", "entry.171573017", "entry.1832385927", "entry.427677382", "entry.169437813", "entry.846552852", "entry.1607516022", "entry.861002564", "entry.1037010190", "entry.988029048", "entry.674957936"],             // ô "Câu 1" … "Câu 40" theo thứ tự
+  BLANK_VALUE: "-",          // câu bỏ trống (form bắt buộc trả lời đủ)
+  SHOW_ANSWERS_AFTER_SUBMIT: true
+};
+</script>
+
+<header class="topbar">
+  <div class="title" id="topTitle"></div>
+  <div class="timer" id="timer">50:00</div>
+  <button class="btn btn-light hidden" id="btnSubmitTop">Nộp bài</button>
+</header>
+
+<!-- start -->
+<section id="startScreen" class="center-card">
+  <h1 id="startTitle"></h1>
+  <p class="sub">40 câu trắc nghiệm · 50 phút · mỗi câu 0,25 điểm</p>
+  <div class="field"><label for="inName">Họ và tên</label><input id="inName" autocomplete="name" placeholder="VD: Nguyễn Văn An"></div>
+  <div class="field"><label for="inClass">Lớp</label><input id="inClass" placeholder="VD: 12A1"></div>
+  <div class="rules">
+    <b>Lưu ý trước khi làm bài</b>
+    <ul>
+      <li>Đồng hồ bắt đầu chạy ngay khi bấm <b>Bắt đầu làm bài</b>; hết giờ bài sẽ tự nộp.</li>
+      <li>Với bài đọc dài: bài đọc nằm bên trái, câu hỏi bên phải.</li>
+      <li>Bảng số câu ở góc phải dưới giúp chuyển nhanh tới câu bất kỳ.</li>
+      <li>Bài làm được lưu tạm trên máy; lỡ tải lại trang vẫn làm tiếp được.</li>
+    </ul>
+  </div>
+  <button class="btn btn-primary" id="btnStart" style="width:100%;padding:12px">Bắt đầu làm bài</button>
+  <p id="resumeNote" class="sub hidden" style="margin-top:12px;margin-bottom:0"></p>
+</section>
+
+<!-- exam -->
+<nav class="nav hidden" id="secNav"></nav>
+<main class="wrap hidden" id="examWrap"></main>
+
+<aside class="palette min hidden" id="palette">
+  <div class="ph"><span id="palCount">Đã làm 0/40</span><button class="toggle" id="palToggle">Mở bảng câu</button></div>
+  <div class="grid" id="palGrid"></div>
+  <div class="pf"><button class="btn btn-primary" id="btnSubmitPal">Nộp bài</button></div>
+</aside>
+
+<!-- result -->
+<section class="result hidden" id="resultScreen"></section>
+
+<div class="modal hidden" id="modal"><div class="box"><h3 id="mTitle"></h3><div id="mBody"></div><div class="actions" id="mActions"></div></div></div>
+
+<script>
+/* ===================== DỮ LIỆU ĐỀ ===================== */
+/* Quy ước: **in đậm**, ~~gạch chân + in đậm~~ */
+const SECTIONS = [
+{
+  id:"s1", name:"Q1–5", label:"Sắp xếp câu",
+  instr:"Mark the letter A, B, C or D to indicate the best arrangement of utterances or sentences to make a cohesive and coherent exchange or text in each of the following questions from 1 to 5.",
+  questions:[
+    {n:1, items:["a. Researchers warn that relying too heavily on these tools may gradually weaken memory, creativity, and critical thinking.","b. In one MIT study, students who used ChatGPT to write essays showed much less brain activity and later struggled to remember what they had written.","c. As large language models become more common, many people are using them to complete tasks that once required independent thinking.","d. Some experts fear that this pattern of accepting AI-generated answers with little questioning may eventually contribute to cognitive decline, especially among younger users.","e. Teachers also found that many AI-assisted essays looked similar, lacked originality, and were often described as “soulless.”"], opts:["c – a – b – e – d","c – a – e – b – d","c – e – a – b – d","c – e – b – a – d"], key:"A"},
+    {n:2, items:["a. Linda: Oh, I know, he taught me when I was quite young. He's got a beard and lots of black hair, hasn't he?","b. David: I've just started learning the piano. I've got a really nice teacher. He's called Mr Hall.","c. David: Well, the Mr Hall who teaches me hasn't got much hair and it's grey, but he does have a beard and wears glasses."], opts:["c – b – a","a – b – c","b – a – c","b – c – a"], key:"C"},
+    {n:3, stem:"Dear Scholarship Committee,", items:["a. I am writing to apply for the Academic Excellence Scholarship offered by your university for the 2026–2027 academic year.","b. This scholarship would significantly support my studies in Environmental Science, allowing me to focus on research projects and academic development.","c. Throughout my secondary education, I have consistently achieved top academic results and actively participated in science competitions and community projects.","d. If awarded this scholarship, I will contribute to campus research initiatives while maintaining high academic performance.","e. I would be grateful for the opportunity to be considered and am available for any further interviews required.","Yours faithfully,","Linh Pham"], opts:["a – d – c – b – e","a – c – b – d – e","a – e – d – b – c","a – b – c – e – d"], key:"B"},
+    {n:4, items:["a. Alex: Why do you think knitting is helpful?","b. Sue: I’m going to try knitting to relax after school.","c. Alex: How are you going to calm your mind after stressful days?","d. Alex: I think knitting takes too much patience. I don’t think I’ll try it.","e. Sue: It helps people focus on simple movements, reduces stress, and makes them feel calmer."], opts:["d – e – a – b – c","c – e – d – b – a","c – b – a – e – d","d – b – a – e – c"], key:"C"},
+    {n:5, items:["a. Consequently, the distinction between authentic identity and curated representation becomes increasingly blurred, making self-presentation a strategic act rather than a spontaneous expression.","b. A curated persona refers to the carefully constructed version of oneself that individuals present on social media and other digital platforms.","c. In many cases, users selectively highlight achievements, experiences, and emotions while omitting aspects that may appear ordinary or undesirable.","d. This shift reflects how digital environments encourage individuals to continuously manage impressions in order to gain approval, attention, or social validation.","e. Furthermore, the pressure to maintain a consistent online image often leads individuals to adjust their behaviour in offline contexts as well."], opts:["c – b – e – d – a","b – c – d – e – a","b – c – a – d – e","b – a – c – e – d"], key:"B"}
+  ]
+},
+{
+  id:"s2", name:"Q6–10", label:"Điền câu",
+  instr:"Read the following passage and mark the letter A, B, C or D to indicate the option that best fits each of the numbered blanks from 6 to 10.",
+  passage:[
+    "Many students assume that mathematical ability is inherited — that people either possess a natural talent for math or they do not. **(6)** _______. Over time, students who achieve the most success tend to be those who consistently put in effort, rather than those with the highest intelligence. For these learners, perseverance, rather than innate talent, **(7)** _______.",
+    "In her book <i>Mindset: The New Psychology of Success</i>, **(8)** _______. Building on this idea, she argues that a student’s mindset strongly influences how they respond to challenges. Those with a “fixed mindset” tend to believe their abilities are limited, so they often give up when faced with difficulty. In contrast, students with a “growth mindset” view challenges as opportunities to develop their skills. They understand that intelligence can be improved through practice and experience, and are therefore more willing to persist.",
+    "A similar idea is presented by Geoff Colvin in <i>Talent Is Overrated</i>. He emphasizes the importance of “deliberate practice,” **(9)** _______. Although natural talent may provide an initial advantage, it is long-term dedication that ultimately leads to success. As one teacher notes, it is uncommon for a hardworking student to fail. Developing the right mindset is therefore essential. When students believe in their ability to improve and are encouraged to work consistently, **(10)** _______.",
+    "@src (Adapted from TOEFL Reading Comprehension)"
+  ],
+  questions:[
+    {n:6, opts:["However, recent research suggests that inborn ability may be less important than is often believed","In addition, schools should provide more structured support for students who struggle with mathematics","For example, many educators have long believed that mathematical talent is fixed at birth","As a result, intelligence has always been considered the most decisive factor in academic success"], key:"A"},
+    {n:7, opts:["tends to be far less important than intelligence in achieving success","is often regarded as a natural ability that cannot be easily developed","reflects the level of natural intelligence that students are born with","plays a central role in achieving long-term academic success"], key:"D"},
+    {n:8, opts:["Carol Dweck introduces the idea that individuals’ beliefs about ability can shape their learning outcomes","that individuals’ beliefs about ability can shape their learning outcomes are the idea by Carol Dweck","introducing the idea that individuals’ beliefs about ability can shape their learning outcomes is by Carol Dweck","the idea by Carol Dweck that individuals’ beliefs about ability can shape their learning outcomes are introduced"], key:"A"},
+    {n:9, opts:["whose focused and sustained effort helps to improve performance over time","involved in focused and sustained effort to improve performance effectively","which involves focused and sustained effort to improve performance","which involves focused and sustained effort, improving performance over time"], key:"C"},
+    {n:10, opts:["they stand a slim chance of overcoming challenges and achieving their full potential","they are more likely to overcome challenges and achieve their full potential","the likelihood of overcoming challenges and achieving their full potential is greatly diminished","overcoming challenges and achieving their full potential seems increasingly unlikely"], key:"B"}
+  ]
+},
+{
+  id:"s3", name:"Q11–20", label:"Đọc hiểu 10 câu",
+  instr:"Read the following passage and mark the letter A, B, C or D to indicate the best answer to each of the following questions from 11 to 20.",
+  numbered:true,
+  passage:[
+    "A substantial share of the global workforce may need to move into new occupations within the next decade, while all workers will have to update their skills in response to rapid technological change. Automation, often linked to embodied artificial intelligence (AI), is only one aspect of this transformation; equally important are algorithmic systems built into digital infrastructures. **[I]** This is especially visible in the knowledge economy, where data-driven roles are increasingly shaped by algorithms that can carry out tasks once dependent on human judgement, including analysing documents, interpreting complex data, and generating strategic insights with greater accuracy.",
+    "While ~~such systems~~ can optimise efficiency, curtail operational costs, and facilitate ostensibly objective decision-making, they simultaneously engender profound challenges for professional development. Traditional ways of gaining expertise, based on observation, apprenticeship, and gradual involvement, may weaken as routine cognitive tasks become automated. This raises important questions about how advanced skills will be developed without continuous human guidance, making it necessary to design new approaches to training and intellectual growth. **[II]**",
+    "Another concern is the growing role of algorithmic management within organisations. In some cases, algorithms determine the nature and timing of employee interactions, replacing forms of judgement that were previously based on experience. As key knowledge becomes ~~embedded~~ in these systems, workers may become too dependent on algorithmic outputs, which could limit creativity and reduce willingness to explore new ideas. **[III]** Moreover, instances of data manipulation to satisfy performance metrics underscore the unintended ramifications and ethical ambiguities inherent in algorithm-driven management structures.",
+    "Looking ahead, the future of work is likely to involve flexible and non-linear career paths, marked by continuous reskilling and regular transitions rather than a fixed progression from education to retirement. **[IV]** This shift in career patterns suggests that long-term job stability can no longer be taken for granted. Instead, retraining happens across the life course, and multiple jobs and no job happen by choice at different stages. ~~Importantly, employment outcomes are influenced not only by technology but also by policies and institutional decisions.~~ Historical precedents suggest that judiciously designed social policies encompassing retraining initiatives and legislative reform can ameliorate disruption while fostering job security, equitable income distribution, and a more inclusive and sustainable economy.",
+    "@src (Adapted from Cambridge IELTS 16)"
+  ],
+  questions:[
+    {n:11, stem:"According to paragraph 1, algorithmic systems are considered as important as automation in shaping the future workforce because _______.", opts:["they can perform a wide range of tasks in all sectors with increasing levels of accuracy and consistency","they mainly affect manual labour rather than knowledge-based occupations","they reduce the need for workers to adapt their skills in response to technological change","they are integrated into digital systems and can perform tasks that previously required human judgement"], key:"D"},
+    {n:12, stem:"Which of the following is NOT stated as an example of tasks that algorithmic systems can perform in the knowledge economy?", opts:["clarifying sophisticated statistics","conducting face-to-face negotiations","examining written materials","formulating strategic recommendations"], key:"B"},
+    {n:13, stem:"The phrase “such systems” in paragraph 2 refers to _______.", opts:["traditional training methods based on observation and experience","decision-making processes based on human judgement","communication tools used by workers in organisations","algorithmic systems used in digital environments to support work tasks"], key:"D"},
+    {n:14, stem:"According to paragraph 3, what happens when performance figures are deliberately adjusted to meet evaluation standards?", opts:["It improves data accuracy and strengthens overall trust within algorithm-based management systems.","It standardises evaluation procedures and ensures consistency within algorithm-based management systems.","It supports managerial decisions and enhances efficiency within algorithm-based management systems.","It exposes hidden consequences and raises ethical concerns within algorithm-based management systems."], key:"D"},
+    {n:15, stem:"Which of the following best summarises paragraph 2?", opts:["While organisations adopt algorithmic systems to enhance performance, they continue to rely on traditional training methods to ensure workers gain necessary expertise.","Algorithmic systems mainly benefit organisations by lowering costs and improving decision-making while having only a limited impact on how workers develop their skills.","While algorithmic systems improve efficiency and reduce costs, they also challenge traditional skill development and require new approaches to professional training.","As algorithmic systems replace routine tasks, workers no longer need traditional forms of training and can rely on technology to develop advanced skills."], key:"C"},
+    {n:16, stem:"The word “embedded” in paragraph 3 is closest in meaning to _______.", opts:["artificially created","deeply integrated","loosely connected","temporarily hidden"], key:"B"},
+    {n:17, stem:"Which of the following can be logically inferred from the passage?", opts:["The widespread adoption of algorithmic systems will eliminate the necessity for human judgement in most fields.","Workers should rely entirely on algorithmic outputs to foster their own creative thinking and innovation in the workplace.","Algorithmic management ensures that employees are empowered to make more flexible, independent decisions at work.","Conventional ways to build expertise may gradually erode as automation takes over routine cognitive tasks."], key:"D"},
+    {n:18, stem:"Which of the following best paraphrases the underlined sentence in paragraph 4?", opts:["Employment outcomes are mainly determined by technological progress rather than by policy or institutional influence.","Policies and institutions have a greater impact on employment outcomes than technological innovation does.","Employment results are shaped by both technological developments and the policies and institutions that regulate them.","Technological change affects employment only when supported by strong institutional and policy frameworks."], key:"C"},
+    {n:19, stem:"Where in the passage does the following sentence best fit?", quote:"Instead of inevitably causing widespread unemployment, technological innovation may encourage the creation of new types of jobs as well as the transformation of the existing ones.", opts:["[I]","[III]","[IV]","[II]"], key:"C"},
+    {n:20, stem:"Which of the following best summarises the passage?", opts:["The increasing use of algorithmic systems is transforming work structures, skill development, and career patterns, requiring both adaptation and policy responses.","The rapid development of automation technologies is improving efficiency in workplaces while gradually reducing the need for human involvement in most tasks.","The shift towards digital systems is changing organisational practices, although traditional career paths and training methods remain largely unchanged.","The future of employment is largely determined by technological innovation, with limited influence from education systems or government policies."], key:"A"}
+  ]
+},
+{
+  id:"s4", name:"Q21–28", label:"Đọc hiểu 8 câu",
+  instr:"Read the following passage and mark the letter A, B, C or D to indicate the best answer to each of the following questions from 21 to 28.",
+  numbered:true,
+  passage:[
+    "@title Exam-Obsessed Schools Leave Youth Unprepared for Work",
+    "An “exam-obsessed” school system is leaving young people fundamentally unprepared for the workforce, according to Alan Milburn. The former cabinet minister, currently leading a government-commissioned review into young people and work, argues that the current model is “brilliant at sorting young people by academic ability” but “poor at ~~equipping~~ them for adult life.” Milburn’s intervention highlights a growing disconnect between classroom priorities and the demands of a fast-changing labour market, where employers frequently report that school leavers are simply not work-ready.",
+    "New YouGov polling of over 1,000 teachers reinforces this concern, with 74% stating there is too much emphasis on passing exams. Furthermore, 73% of educators believe there is ~~insufficient~~ focus on developing essential “soft skills” or preparing pupils for employment. The data reveals a troubling trend: six in ten teachers say young people’s soft skills have worsened over the past five years, while 66% believe overall readiness for work has declined. ~~This~~ serves as a “gauntlet” to policymakers to bridge the gap between academic standards and employability.",
+    "~~Milburn insists that high educational standards and real-world skills are not competing priorities.~~ Instead, he advocates for a curriculum fostering the attributes young people need to succeed – communication and collaboration skills, agility and creativity alongside formal qualifications. Teachers largely support this shift, with 98% backing universal careers advice and 92% supporting vocational pathways before age 16. There is a clear consensus that the system must provide alternative routes for those who struggle under the current high-stakes testing regime without lowering overall standards.",
+    "The review comes as official statistics show nearly 1 million 16- to 24-year-olds are not in education, employment, or training (Neet). Milburn warns that a system judged more on exam results than student destinations will face increasing scrutiny. To reverse the rise in youth inactivity, he calls for stronger links with employers and expanded access to meaningful work experience, asserting that government ambition must be matched by “action at scale” to ensure long-term economic and social success.",
+    "@src (Adapted from https://www.theguardian.com)"
+  ],
+  questions:[
+    {n:21, stem:"The word “equipping” in paragraph 1 is closest in meaning to _______.", opts:["challenging","providing","modifying","neglecting"], key:"B"},
+    {n:22, stem:"The word “insufficient” in paragraph 2 is OPPOSITE in meaning to _______.", opts:["complete","deficient","ample","inadequate"], key:"C"},
+    {n:23, stem:"The word “This” in paragraph 2 refers to _______.", opts:["the excessive emphasis on passing exams in the current school system","the YouGov polling results involving over 1,000 teachers nationwide","the declining trend in soft skills and overall work readiness among youth","the perceived lack of sufficient focus on developing essential soft skills"], key:"C"},
+    {n:24, stem:"Which of the following best paraphrases the underlined sentence in paragraph 3?", opts:["Milburn suggests that real-world skills should be prioritized over maintaining high educational standards.","Milburn believes that academic excellence and practical abilities should be treated as separate goals.","Milburn thinks that achieving high educational standards makes it impossible to develop real-world skills.","Milburn argues that high educational standards and real-world skills can and should be pursued together."], key:"D"},
+    {n:25, stem:"Which of the following qualities is NOT identified in the passage as a key attribute for young people’s success?", opts:["leadership","flexibility","creativity","teamwork"], key:"A"},
+    {n:26, stem:"Which of the following is NOT TRUE according to the passage?", opts:["Wide agreement favors creating alternative paths for struggling students while maintaining rigorous academic standards.","The number of young people not in education, employment, or training is currently approximately one million.","The government's goals require large-scale action to secure lasting economic and social prosperity.","Milburn suggests classroom priorities are already well aligned with labour market expectations and student outcomes."], key:"D"},
+    {n:27, stem:"In which paragraph does the writer present data used to support concerns about exam overemphasis?", opts:["Paragraph 4","Paragraph 3","Paragraph 1","Paragraph 2"], key:"D"},
+    {n:28, stem:"In which paragraph does the writer mention the measures to counter the upward trend in youth disengagement?", opts:["Paragraph 4","Paragraph 1","Paragraph 3","Paragraph 2"], key:"A"}
+  ]
+},
+{
+  id:"s5", name:"Q29–34", label:"Quảng cáo",
+  instr:"Read the following advertisement and mark the letter A, B, C or D to indicate the option that best fits each of the numbered blanks from 29 to 34.",
+  passage:[
+    "@title FUN AND RESUME-BOOSTING SUMMER ACTIVITIES FOR HIGH SCHOOL STUDENTS",
+    "During a summer break, students can explore interests, gain real-world experience, and still enjoy this time **(29)** _______ from school. It is not just for de-stressing, but for getting ahead and **(30)** _______ activities for college applications. Try these activities:",
+    "@ul **Interning:** You can gain hands-on experience **(31)** _______ developing practical skills.|**Working a Summer Job:** **(32)** _______ demonstrates a high level of responsibility on your resume.|**Volunteering:** Like with **(33)** _______ activities, you should choose something genuinely meaningful and important to you.|**Exploring a New Hobby:** Hobbies can make you a more interesting and well-rounded student.|**Taking Summer Classes:** Many community colleges offer early-credit programs, allowing students to get a **(34)** _______ start before the new school year begins.",
+    "@src (Adapted from https://www.theteenmagazine.com)"
+  ],
+  questions:[
+    {n:29, opts:["off","about","on","in"], key:"A"},
+    {n:30, opts:["stacking","backing","racking","breaking"], key:"A"},
+    {n:31, opts:["meanwhile","whereas","while","whereby"], key:"C"},
+    {n:32, opts:["Experience real work","Real experience work","Work real experience","Real work experience"], key:"D"},
+    {n:33, opts:["the other","other","others","another"], key:"B"},
+    {n:34, opts:["head","limb","hand","leg"], key:"A"}
+  ]
+},
+{
+  id:"s6", name:"Q35–40", label:"Tờ rơi",
+  instr:"Read the following leaflet and mark the letter A, B, C or D to indicate the option that best fits each of the numbered blanks from 35 to 40.",
+  passage:[
+    "@title HOW TO BECOME FINANCIALLY INDEPENDENT FROM YOUR PARENTS",
+    "Becoming financially independent is an important step toward adulthood. Here are some practical actions teenagers can take:",
+    "@ul Create a **(35)** _______ to manage both your income and expenses.|Save a large **(36)** _______ of your income each month to build financial security.|Find a part-time job **(37)** _______ helps you gain real-world experience.|Set an ambitious career goal to stay motivated and focused on the future.|Track **(38)** _______ carefully to avoid overspending and build smart habits.|Learn from **(39)** _______ teenagers who have successfully become financially independent.",
+    "With **(40)** _______ and effort, you’ll gain the skills needed to stand on your own financially."
+  ],
+  questions:[
+    {n:35, opts:["plan realistic budget","realistic budget plan","realistic plan budget","budget realistic plan"], key:"B"},
+    {n:36, opts:["number","handful","amount","variety"], key:"C"},
+    {n:37, opts:["whose","who","whom","which"], key:"D"},
+    {n:38, opts:["rewards","expenses","proceeds","subsidies"], key:"B"},
+    {n:39, opts:["each","other","another","others"], key:"B"},
+    {n:40, opts:["competence","emergence","consistency","resistance"], key:"C"}
+  ]
+}
+];
+
+/* ===================== LOGIC ===================== */
+const LET = ["A","B","C","D"];
+const ALLQ = SECTIONS.flatMap(s => s.questions.map(q => ({...q, sec:s.id})));
+const TOTAL = ALLQ.length;
+const STORE_KEY = "dethithu_TA2026_de01_v1";
+const $ = id => document.getElementById(id);
+
+let state = { name:"", cls:"", answers:{}, startedAt:null, submitted:false, endAt:null, curSec:"s1", report:null };
+let tick = null;
+
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+function load(){ try{ const s = JSON.parse(localStorage.getItem(STORE_KEY)||"null"); if(s) state = Object.assign(state, s); }catch(e){} }
+function clearStore(){ try{ localStorage.removeItem(STORE_KEY); }catch(e){} }
+
+function fmt(s){ return s.replace(/~~(.+?)~~/g,"<u><b>$1</b></u>").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>"); }
+function esc(s){ return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function renderPassage(sec){
+  let html = "", p = 0;
+  sec.passage.forEach(line => {
+    if(line.startsWith("@src ")) html += `<p class="src">${fmt(line.slice(5))}</p>`;
+    else if(line.startsWith("@title ")) html += `<p class="ptitle">${fmt(line.slice(7))}</p>`;
+    else if(line.startsWith("@ul ")) html += "<ul>" + line.slice(4).split("|").map(li=>`<li>${fmt(li)}</li>`).join("") + "</ul>";
+    else { p++; html += `<p>${sec.numbered?`<span class="pnum">¶${p}</span>`:""}${fmt(line)}</p>`; }
+  });
+  return html;
+}
+
+function optClass(opts){
+  const mx = Math.max(...opts.map(o=>o.length));
+  return mx <= 22 ? "short" : mx <= 48 ? "mid" : "";
+}
+
+function renderQuestion(q){
+  const chosen = state.answers[q.n];
+  let flag = "";
+  if(state.submitted && CONFIG.SHOW_ANSWERS_AFTER_SUBMIT){
+    flag = chosen===q.key ? `<span class="qflag ok">✓ Đúng</span>` : `<span class="qflag no">✗ ${chosen?"Sai":"Bỏ trống"} – đáp án ${q.key}</span>`;
+  }
+  let h = `<div class="q${state.submitted?" locked":""}" id="q${q.n}"><div class="stem"><b class="qn">Question ${q.n}.</b> ${q.stem?fmt(q.stem):""}${flag}</div>`;
+  if(q.items) h += `<div class="items">${q.items.map(t=>`<div>${esc(t)}</div>`).join("")}</div>`;
+  if(q.quote) h += `<div class="quote">${esc(q.quote)}</div>`;
+  h += `<div class="opts ${optClass(q.opts)}">`;
+  q.opts.forEach((o,i)=>{
+    const L = LET[i];
+    let cls = "opt";
+    if(chosen===L) cls += " sel";
+    if(state.submitted && CONFIG.SHOW_ANSWERS_AFTER_SUBMIT){
+      if(L===q.key) cls += " right"; else if(chosen===L) cls += " wrong";
+    }
+    h += `<button class="${cls}" data-q="${q.n}" data-l="${L}" ${state.submitted?"disabled":""}><span class="L">${L}.</span><span>${esc(o)}</span></button>`;
+  });
+  return h + "</div></div>";
+}
+
+function renderSection(){
+  const idx = SECTIONS.findIndex(s=>s.id===state.curSec);
+  const sec = SECTIONS[idx];
+  let h = `<div class="sec-head">${esc(sec.instr)}</div>`;
+  const qs = sec.questions.map(renderQuestion).join("");
+  if(sec.passage) h += `<div class="split"><article class="passage">${renderPassage(sec)}</article><div class="qcol">${qs}</div></div>`;
+  else h += `<div class="qcol" style="max-width:900px;margin:0 auto">${qs}</div>`;
+  h += `<div class="secfoot">
+    <button class="btn btn-ghost" id="prevSec" ${idx===0?"disabled":""}>← Phần trước</button>
+    ${idx<SECTIONS.length-1?`<button class="btn btn-primary" id="nextSec">Phần tiếp theo →</button>`:(state.submitted?"":`<button class="btn btn-primary" id="endSubmit">Nộp bài</button>`)}
+  </div>`;
+  $("examWrap").innerHTML = h;
+  $("examWrap").querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>choose(+b.dataset.q,b.dataset.l)));
+  if($("prevSec")) $("prevSec").onclick = ()=>goSec(SECTIONS[idx-1].id);
+  if($("nextSec")) $("nextSec").onclick = ()=>goSec(SECTIONS[idx+1].id);
+  if($("endSubmit")) $("endSubmit").onclick = confirmSubmit;
+  renderNav(); renderPalette();
+}
+
+function renderNav(){
+  $("secNav").innerHTML = SECTIONS.map(s=>{
+    const done = s.questions.filter(q=>state.answers[q.n]).length;
+    return `<button data-s="${s.id}" class="${s.id===state.curSec?"active":""}">${s.name} · ${s.label}<span class="cnt">${done}/${s.questions.length}</span></button>`;
+  }).join("");
+  $("secNav").querySelectorAll("button").forEach(b=>b.onclick=()=>goSec(b.dataset.s));
+}
+
+function renderPalette(){
+  const done = Object.keys(state.answers).length;
+  $("palCount").textContent = state.submitted ? "Kết quả từng câu" : `Đã làm ${done}/${TOTAL}`;
+  $("palGrid").innerHTML = ALLQ.map(q=>{
+    let c = state.answers[q.n] ? "done" : "";
+    if(state.submitted && CONFIG.SHOW_ANSWERS_AFTER_SUBMIT) c = state.answers[q.n]===q.key ? "r" : "w";
+    return `<button class="${c}" data-n="${q.n}" data-s="${q.sec}">${q.n}</button>`;
+  }).join("");
+  $("palGrid").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    goSec(b.dataset.s, false);
+    const el = $("q"+b.dataset.n);
+    if(el){ el.scrollIntoView({behavior:"smooth",block:"start"}); el.style.outline="2px solid var(--accent)"; setTimeout(()=>el.style.outline="",1200); }
+  });
+  $("btnSubmitPal").classList.toggle("hidden", state.submitted);
+}
+
+function goSec(id, scroll=true){
+  if(state.curSec!==id){ state.curSec = id; save(); renderSection(); }
+  if(scroll) window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function choose(n,L){
+  if(state.submitted) return;
+  state.answers[n] = state.answers[n]===L ? undefined : L;
+  if(!state.answers[n]) delete state.answers[n];
+  save();
+  const q = ALLQ.find(x=>x.n===n);
+  const el = $("q"+n); el.outerHTML = renderQuestion(q);
+  $("q"+n).querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>choose(+b.dataset.q,b.dataset.l)));
+  renderNav(); renderPalette();
+}
+
+/* ---------- timer ---------- */
+function remaining(){ return Math.max(0, Math.round((state.startedAt + CONFIG.DURATION_MIN*60000 - Date.now())/1000)); }
+function mmss(t){ return String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0"); }
+function startTick(){
+  clearInterval(tick);
+  const upd = ()=>{
+    const t = remaining();
+    const el = $("timer"); el.textContent = mmss(t);
+    el.classList.toggle("warn", t<=300 && t>60);
+    el.classList.toggle("crit", t<=60);
+    if(t===300 && !state._warned5){ state._warned5=true; save(); modal("Còn 5 phút","<p>Bạn còn 5 phút làm bài. Hãy kiểm tra các câu chưa làm trong bảng số câu.</p>",[["Tiếp tục làm","btn-primary",closeModal]]); }
+    if(t<=0){ clearInterval(tick); submit(true); }
+  };
+  upd(); tick = setInterval(upd, 1000);
+}
+
+/* ---------- modal ---------- */
+function modal(title, body, buttons){
+  $("mTitle").textContent = title; $("mBody").innerHTML = body;
+  $("mActions").innerHTML = "";
+  buttons.forEach(([t,c,fn])=>{ const b=document.createElement("button"); b.className="btn "+c; b.textContent=t; b.onclick=fn; $("mActions").appendChild(b); });
+  $("modal").classList.remove("hidden");
+}
+function closeModal(){ $("modal").classList.add("hidden"); }
+
+function confirmSubmit(){
+  const left = TOTAL - Object.keys(state.answers).length;
+  modal("Nộp bài?", left ? `<p>Bạn còn <b>${left} câu</b> chưa làm. Nộp bài bây giờ?</p>` : "<p>Bạn đã làm đủ 40 câu. Nộp bài bây giờ?</p>",
+    [["Làm tiếp","btn-ghost",closeModal],["Nộp bài","btn-primary",()=>{closeModal();submit(false);}]]);
+}
+
+/* ---------- scoring & report ---------- */
+function grade(){
+  let correct = 0; const per = {}; const wrong = [];
+  SECTIONS.forEach(s=>per[s.id]={name:`${s.name} ${s.label}`, c:0, t:s.questions.length});
+  ALLQ.forEach(q=>{
+    if(state.answers[q.n]===q.key){ correct++; per[q.sec].c++; } else wrong.push(q.n);
+  });
+  return { correct, score: Math.round(correct*0.25*100)/100, per, wrong };
+}
+
+function buildPayload(g){
+  const used = state.endAt - state.startedAt;
+  const usedTxt = mmss(Math.min(CONFIG.DURATION_MIN*60, Math.round(used/1000)));
+  const detail = SECTIONS.map(s=>`${s.name}: ${g.per[s.id].c}/${g.per[s.id].t}`).join("; ") + (g.wrong.length?` | Sai/bỏ trống: ${g.wrong.join(", ")}`:"");
+  const bailam = ALLQ.map(q=>`${q.n}${state.answers[q.n]||"-"}`).join(" ");
+  return { HOTEN:state.name, LOP:state.cls, DIEM:String(g.score).replace(".",","), SOCAU:`${g.correct}/${TOTAL}`, THOIGIAN:usedTxt, CHITIET:detail, BAILAM:bailam };
+}
+
+function formFields(){
+  const fields = [[CONFIG.ENTRY_NAME, `${state.name} - ${state.cls}`]];
+  CONFIG.ENTRY_Q.forEach((en,i)=>{ if(en) fields.push([en, state.answers[i+1] || CONFIG.BLANK_VALUE]); });
+  fields.push(["fvv","1"],["pageHistory","0"]);
+  return fields;
+}
+function sendVisible(){
+  const f=document.createElement("form"); f.method="POST"; f.action=CONFIG.FORM_ACTION; f.target="_blank"; f.style.display="none";
+  formFields().forEach(([k,v])=>{const i=document.createElement("input"); i.type="hidden"; i.name=k; i.value=v; f.appendChild(i);});
+  document.body.appendChild(f); f.submit(); f.remove();
+}
+function sendToForm(){
+  return new Promise(resolve=>{
+    if(!CONFIG.FORM_ACTION || !CONFIG.ENTRY_NAME){ resolve("noconfig"); return; }
+    const fields = formFields();
+    // Cách 1: gửi bằng form ẩn vào iframe ẩn (ổn định nhất với Google Form)
+    let done = false;
+    const finish = r=>{ if(!done){ done=true; resolve(r); } };
+    try{
+      const ifr = document.createElement("iframe");
+      ifr.name = "gf_sink_" + Date.now(); ifr.style.display = "none";
+      document.body.appendChild(ifr);
+      const f = document.createElement("form");
+      f.method = "POST"; f.action = CONFIG.FORM_ACTION; f.target = ifr.name; f.style.display = "none";
+      fields.forEach(([k,v])=>{ const inp=document.createElement("input"); inp.type="hidden"; inp.name=k; inp.value=v; f.appendChild(inp); });
+      document.body.appendChild(f);
+      ifr.addEventListener("load", ()=>finish("sent"));
+      f.submit();
+    }catch(e){
+      // Cách 2: fetch no-cors
+      const body = new URLSearchParams(); fields.forEach(([k,v])=>body.append(k,v));
+      fetch(CONFIG.FORM_ACTION,{method:"POST",mode:"no-cors",body}).then(()=>finish("sent")).catch(()=>finish("error"));
+    }
+    setTimeout(()=>finish("sent"), 6000);
+  });
+}
+
+async function submit(auto){
+  if(state.submitted) return;
+  clearInterval(tick);
+  state.submitted = true; state.endAt = Date.now();
+  const g = grade(); const payload = buildPayload(g);
+  state.report = { g, payload, status:"sending" }; save();
+  showResult(auto);
+  const st = await sendToForm();
+  state.report.status = st; save();
+  showResult(auto);
+}
+
+function resultText(p){
+  return `${CONFIG.EXAM_TITLE}\nHọ tên: ${p.HOTEN}\nLớp: ${p.LOP}\nĐiểm: ${p.DIEM}/10 (${p.SOCAU} câu đúng)\nThời gian làm bài: ${p.THOIGIAN}\nChi tiết: ${p.CHITIET}\nBài làm: ${p.BAILAM}`;
+}
+
+function showResult(auto){
+  const {g,payload,status} = state.report;
+  $("examWrap").classList.add("hidden"); $("secNav").classList.add("hidden"); $("palette").classList.add("hidden");
+  $("btnSubmitTop").classList.add("hidden");
+  $("timer").textContent = "Đã nộp"; $("timer").classList.remove("warn","crit");
+  let st = "";
+  if(status==="sending") st = `<div class="status info">Đang gửi kết quả về cho giáo viên…</div>`;
+  else if(status==="sent") st = `<div class="status ok">✓ Bài làm đã được gửi tới Google Form của giáo viên.</div>`;
+  else st = `<div class="status err">Chưa gửi được bài làm (có thể do mất mạng). Hãy bấm <b>Gửi lại</b>, hoặc <b>Sao chép kết quả</b> và gửi cho giáo viên.</div>`;
+  const rows = SECTIONS.map(s=>`<tr><td>${s.name}</td><td>${s.label}</td><td class="n">${g.per[s.id].c}/${g.per[s.id].t}</td></tr>`).join("");
+  $("resultScreen").innerHTML = `
+    ${auto?`<div class="status err">Đã hết giờ – bài làm được nộp tự động.</div>`:""}
+    <div class="score">
+      <div class="big">${payload.DIEM}<small>/10</small></div>
+      <div><div><b>${esc(payload.HOTEN)}</b> – Lớp ${esc(payload.LOP)}</div>
+      <div>Số câu đúng: <b>${payload.SOCAU}</b></div><div>Thời gian làm bài: <b>${payload.THOIGIAN}</b></div></div>
+    </div>
+    ${st}
+    <table class="bd"><thead><tr><th>Câu</th><th>Dạng bài</th><th style="text-align:right">Đúng</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="actions">
+      ${status==="sent"||status==="sending"?"":`<button class="btn btn-primary" id="btnResend">Gửi lại</button>`}
+      <button class="btn btn-ghost" id="btnCopy">Sao chép kết quả</button>
+      <button class="btn btn-ghost" id="btnVisible" title="Mở trang xác nhận của Google Form trong tab mới">Gửi qua tab mới</button>
+      ${CONFIG.SHOW_ANSWERS_AFTER_SUBMIT?`<button class="btn btn-ghost" id="btnReview">Xem lại bài làm</button>`:""}
+      <button class="btn btn-ghost" id="btnReset">Làm lại từ đầu</button>
+    </div>`;
+  $("resultScreen").classList.remove("hidden");
+  if($("btnResend")) $("btnResend").onclick = async ()=>{ state.report.status="sending"; showResult(false); state.report.status = await sendToForm(); save(); showResult(false); };
+  $("btnVisible").onclick = ()=>sendVisible();
+  $("btnCopy").onclick = async ()=>{
+    const t = resultText(payload);
+    try{ await navigator.clipboard.writeText(t); $("btnCopy").textContent="Đã sao chép ✓"; }
+    catch(e){ modal("Kết quả", `<textarea style="width:100%;height:160px">${esc(t)}</textarea>`, [["Đóng","btn-primary",closeModal]]); }
+  };
+  if($("btnReview")) $("btnReview").onclick = ()=>{
+    $("resultScreen").classList.add("hidden");
+    $("examWrap").classList.remove("hidden"); $("secNav").classList.remove("hidden"); $("palette").classList.remove("hidden");
+    state.curSec = "s1"; renderSection();
+    const back = document.createElement("div"); back.style.cssText="text-align:center;margin:10px 0";
+    back.innerHTML = `<button class="btn btn-primary">← Quay lại trang kết quả</button>`;
+    back.querySelector("button").onclick = ()=>showResult(false);
+    $("examWrap").prepend(back);
+  };
+  $("btnReset").onclick = ()=>modal("Làm lại từ đầu?","<p>Toàn bộ bài làm và kết quả trên máy này sẽ bị xóa.</p>",[["Hủy","btn-ghost",closeModal],["Làm lại","btn-primary",()=>{clearStore();location.reload();}]]);
+  window.scrollTo({top:0});
+}
+
+/* ---------- start ---------- */
+function enterExam(){
+  $("startScreen").classList.add("hidden");
+  ["secNav","examWrap","palette","btnSubmitTop"].forEach(id=>$(id).classList.remove("hidden"));
+  renderSection(); startTick();
+}
+
+function init(){
+  document.title = CONFIG.EXAM_TITLE;
+  $("topTitle").textContent = CONFIG.EXAM_TITLE;
+  $("startTitle").textContent = CONFIG.EXAM_TITLE;
+  $("timer").textContent = mmss(CONFIG.DURATION_MIN*60);
+  load();
+  if(state.submitted && state.report){ $("startScreen").classList.add("hidden"); if(state.report.status!=="sent"){ state.report.status="sending"; showResult(false); sendToForm().then(r=>{state.report.status=r; save(); showResult(false);}); } else showResult(false); return; }
+  if(state.startedAt){
+    if(remaining()<=0){ $("startScreen").classList.add("hidden"); submit(true); return; }
+    $("inName").value = state.name; $("inClass").value = state.cls;
+    $("btnStart").textContent = "Tiếp tục làm bài";
+    $("resumeNote").textContent = `Bài làm đang dở của ${state.name} (${Object.keys(state.answers).length}/${TOTAL} câu). Đồng hồ vẫn tiếp tục chạy.`;
+    $("resumeNote").classList.remove("hidden");
+  }
+  $("btnStart").onclick = ()=>{
+    const name = $("inName").value.trim(), cls = $("inClass").value.trim();
+    if(!name || !cls){ modal("Thiếu thông tin","<p>Vui lòng nhập đầy đủ họ tên và lớp trước khi bắt đầu.</p>",[["OK","btn-primary",closeModal]]); return; }
+    state.name = name; state.cls = cls;
+    if(!state.startedAt) state.startedAt = Date.now();
+    save(); enterExam();
+  };
+  $("btnSubmitTop").onclick = confirmSubmit;
+  $("btnSubmitPal").onclick = confirmSubmit;
+  $("palToggle").onclick = ()=>{ const p=$("palette"); p.classList.toggle("min"); $("palToggle").textContent = p.classList.contains("min")?"Mở bảng câu":"Thu gọn"; };
+  window.addEventListener("beforeunload", e=>{ if(state.startedAt && !state.submitted){ e.preventDefault(); e.returnValue=""; } });
+}
+init();
+</script>
+</body>
+</html>
